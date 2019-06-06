@@ -1,15 +1,18 @@
 ﻿/*************************************************************
  *          Project: QRN CMS                                 *
- *              Web: http://tecrt.com/qrncms                 *
+ *              Web: http://tecrt.com/cms                    *
  *           Author: Qumruzzaman, Rashidul, Nazmul           *
  *          Website: byronbd.com, masums.com, gmnazmul.com   *
  *            Email: tecrt.com@gmail.com                     *
  *          License: AGPL v3                                 *
  *************************************************************/
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using QrnCms.Lib.App;
 
 namespace QrnCms.Lib.Cms.Modules
 {
@@ -18,9 +21,8 @@ namespace QrnCms.Lib.Cms.Modules
         int Order { get; set; }
 
         string Title { get; set; }
-        float Version { get; set; }
-        string VersionDetails { get; set; }
-        int MinCmsVersion { get; set; }
+        Version Version { get; set; } 
+        Version MinCmsVersion { get; set; }
 
         string Author { get; set; }
         string Email { get; set; }
@@ -36,6 +38,9 @@ namespace QrnCms.Lib.Cms.Modules
         List<string> SupportedLanguages { get; }
         List<string> SupportedDatabases { get; }
 
+        void Configure(IApplicationBuilder appBuilder);
+        void ConfigureServices(IServiceCollection services);
+
         bool Install();
         bool Uninstall();
         bool Update();
@@ -44,5 +49,66 @@ namespace QrnCms.Lib.Cms.Modules
         bool Inactivate();
 
         bool RemoveTables();
+    }
+
+    public class BaseModule : IModule
+    {
+        public int Order { get; set; }
+        public string Title { get; set; }
+        public Version Version { get; set; }
+        public Version MinCmsVersion { get; set; }
+        public string Author { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+        public string DemoUrl { get; set; }
+        public string Description { get; set; }
+        public string Category { get; set; }
+        public string TablePrefix { get; set; }
+
+        public string Area => "";
+
+        public List<string> SupportedLanguages => new List<string>() { App.SupportedLanguages.En.ToString()};
+
+        public List<string> SupportedDatabases => new List<string>() { App.SupportedDatabase.MySql.ToString()};
+
+        public bool Activate()
+        {
+            return false;
+        }
+
+        public void Configure(IApplicationBuilder appBuilder)
+        {
+             
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+             
+        }
+
+        public bool Inactivate()
+        {
+            return false;
+        }
+
+        public bool Install()
+        {
+            return false;
+        }
+
+        public bool RemoveTables()
+        {
+            return false;
+        }
+
+        public bool Uninstall()
+        {
+            return false;
+        }
+
+        public bool Update()
+        {
+            return false;
+        }
     }
 }
