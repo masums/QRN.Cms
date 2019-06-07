@@ -71,42 +71,42 @@ namespace QrnCms.Lib.Cms.Modules
 
         public List<string> SupportedDatabases => new List<string>() { App.SupportedDatabase.MySql.ToString()};
 
-        public bool Activate()
+        public virtual bool Activate()
         {
             return false;
         }
 
-        public void Configure(IApplicationBuilder appBuilder)
+        public virtual void Configure(IApplicationBuilder appBuilder)
         {
              
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
              
         }
 
-        public bool Inactivate()
+        public virtual bool Inactivate()
         {
             return false;
         }
 
-        public bool Install()
+        public virtual bool Install()
         {
             return false;
         }
 
-        public bool RemoveTables()
+        public virtual bool RemoveTables()
         {
             return false;
         }
 
-        public bool Uninstall()
+        public virtual bool Uninstall()
         {
             return false;
         }
 
-        public bool Update()
+        public virtual bool Update()
         {
             return false;
         }

@@ -12,14 +12,54 @@ using QrnCms.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using QrnCms.Lib.Cms.Modules;
+using System.IO;
+using McMaster.NETCore.Plugins;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using QrnCms.Lib.App;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using QrnCms.Lib.App.Providers;
 
 namespace QrnCms.Web
 {
     public class Startup
     {
+        public static ModuleLoader _moduleContext;
+        private List<IModule> _plugins = new List<IModule>();
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var ModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
+            foreach (var pluginDir in Directory.GetDirectories(ModulePath))
+            {
+
+                var dirName = Path.GetFileName(pluginDir);
+                var pluginFile = Path.Combine(pluginDir, "bin","Debug","netcoreapp3.0", dirName + ".dll");
+                _moduleContext = ModuleLoader.CreateFromAssemblyFile(pluginFile,
+                    // this ensures that the plugin resolves to the same version of DependencyInjection
+                    // and ASP.NET Core that the current app uses
+                    sharedTypes: new[]
+                    {
+                        typeof(IApplicationBuilder),
+                        typeof(IModule),
+                        typeof(IServiceCollection),
+                    }, (opt) => { opt.PreferSharedTypes = true; opt.IsUnloadable = true; });
+
+                GlobalContext.ModuleContext = _moduleContext;
+
+                var pluginAssembly = _moduleContext.LoadDefaultAssembly();
+                foreach (var type in pluginAssembly
+                    .GetTypes()
+                    .Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract))
+                {
+                    Debug.WriteLine("Found plugin " + type.Name);
+                    var plugin = (IModule)Activator.CreateInstance(type);
+                    _plugins.Add(plugin);
+                }
+            }
+
         }
 
         public IConfiguration Configuration { get; }
@@ -42,6 +82,40 @@ namespace QrnCms.Web
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();
             services.AddRazorPages();
+
+            foreach (var plugin in _plugins)
+            {
+                plugin.ConfigureServices(services);
+            }
+
+            var mvcBuilder = services.AddMvc(cfg=> { cfg.EnableEndpointRouting = false; });
+            GlobalContext.MvcBuilder = mvcBuilder;
+
+            var pluginAssembly = _moduleContext.LoadDefaultAssembly();
+
+            var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
+            foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
+            {
+                Debug.WriteLine($"* {part.Name}");
+                mvcBuilder.PartManager.ApplicationParts.Add(part);
+            }
+
+            // This piece finds and loads related parts, such as MvcAppPlugin1.Views.dll.
+            var relatedAssembliesAttrs = pluginAssembly.GetCustomAttributes(typeof(RelatedAssemblyAttribute),true);
+            foreach (RelatedAssemblyAttribute attr in relatedAssembliesAttrs)
+            {
+                var assembly = _moduleContext.LoadAssembly(attr.AssemblyFileName);
+                partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
+                foreach (var part in partFactory.GetApplicationParts(assembly))
+                {
+                    Console.WriteLine($"  * {part.Name}");
+                    mvcBuilder.PartManager.ApplicationParts.Add(part);
+                }
+            }
+
+            services.AddSingleton<IActionDescriptorChangeProvider>(QrnActionDescriptorChangeProvider.Instance);
+            services.AddSingleton(QrnActionDescriptorChangeProvider.Instance);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,11 +138,20 @@ namespace QrnCms.Web
 
             app.UseCookiePolicy();
 
-            app.UseRouting();
+            app.UseMvc(cfg => { });
+
+            app.UseMvcWithDefaultRoute();
+            //app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            foreach (var plugin in _plugins)
+            {
+                plugin.Configure(app);
+            }
+
+            /*
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -76,6 +159,8 @@ namespace QrnCms.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            */
+
         }
     }
 }
