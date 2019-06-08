@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace McMaster.NETCore.Plugins
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// Represents the configuration for a .NET Core plugin.

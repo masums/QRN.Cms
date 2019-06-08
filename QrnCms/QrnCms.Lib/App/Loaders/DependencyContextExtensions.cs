@@ -6,11 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using McMaster.NETCore.Plugins.LibraryModel;
 using Microsoft.Extensions.DependencyModel;
-using NativeLibrary = McMaster.NETCore.Plugins.LibraryModel.NativeLibrary;
 
-namespace McMaster.NETCore.Plugins.Loader
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// Extensions for configuring a load context using .deps.json files.

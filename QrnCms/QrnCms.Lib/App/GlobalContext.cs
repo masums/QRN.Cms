@@ -1,5 +1,5 @@
-﻿using McMaster.NETCore.Plugins;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QrnCms.Lib.App.Loaders;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -5,9 +5,8 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
-using McMaster.NETCore.Plugins.Loader;
 
-namespace McMaster.NETCore.Plugins
+namespace QrnCms.Lib.App.Loaders
 {    
     public class ModuleLoader : IDisposable
     {

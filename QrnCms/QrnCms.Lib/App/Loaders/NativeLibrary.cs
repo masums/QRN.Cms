@@ -4,7 +4,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace McMaster.NETCore.Plugins.LibraryModel
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// Represents an unmanaged library, such as `libsqlite3`, which may need to be loaded

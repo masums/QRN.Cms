@@ -6,9 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using McMaster.NETCore.Plugins.LibraryModel;
 
-namespace McMaster.NETCore.Plugins.Loader
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// An implementation of <see cref="AssemblyLoadContext" /> which attempts to load managed and native

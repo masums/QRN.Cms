@@ -7,9 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using McMaster.NETCore.Plugins.LibraryModel;
 
-namespace McMaster.NETCore.Plugins.Loader
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// A builder for creating an instance of <see cref="AssemblyLoadContext" />.

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace McMaster.NETCore.Plugins.LibraryModel
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// Represents a managed, .NET assembly.

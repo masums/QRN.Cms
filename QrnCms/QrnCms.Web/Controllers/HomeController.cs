@@ -65,7 +65,7 @@ namespace QrnCms.Web.Controllers
         }
 
        
-        public IActionResult RegisterControllerAtRuntime()
+        public IActionResult LoadModule()
         {
             string assemblyPath = @"PATH\ExternalControllers.dll";
             var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);

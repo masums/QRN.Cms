@@ -14,51 +14,41 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using QrnCms.Lib.Cms.Modules;
 using System.IO;
-using McMaster.NETCore.Plugins;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using QrnCms.Lib.App;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using QrnCms.Lib.App.Providers;
+using QrnCms.Lib.App.Loaders;
 
 namespace QrnCms.Web
 {
     public class Startup
     {
-        public static ModuleLoader _moduleContext;
-        private List<IModule> _plugins = new List<IModule>();
+        List<ModuleEntry> _adminModules = new List<ModuleEntry>();
+        List<ModuleEntry> _siteModules = new List<ModuleEntry>();
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            var ModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
-            foreach (var pluginDir in Directory.GetDirectories(ModulePath))
-            {
 
-                var dirName = Path.GetFileName(pluginDir);
-                var pluginFile = Path.Combine(pluginDir, "bin","Debug","netcoreapp3.0", dirName + ".dll");
-                _moduleContext = ModuleLoader.CreateFromAssemblyFile(pluginFile,
-                    // this ensures that the plugin resolves to the same version of DependencyInjection
-                    // and ASP.NET Core that the current app uses
-                    sharedTypes: new[]
-                    {
-                        typeof(IApplicationBuilder),
-                        typeof(IModule),
-                        typeof(IServiceCollection),
-                    }, (opt) => { opt.PreferSharedTypes = true; opt.IsUnloadable = true; });
+            var siteModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
 
-                GlobalContext.ModuleContext = _moduleContext;
+            _siteModules = LoadModules(siteModulePath, new[]
+                        {
+                            typeof(IApplicationBuilder),
+                            typeof(IModule),
+                            typeof(IServiceCollection),
+                        });
 
-                var pluginAssembly = _moduleContext.LoadDefaultAssembly();
-                foreach (var type in pluginAssembly
-                    .GetTypes()
-                    .Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract))
-                {
-                    Debug.WriteLine("Found plugin " + type.Name);
-                    var plugin = (IModule)Activator.CreateInstance(type);
-                    _plugins.Add(plugin);
-                }
-            }
+            var adminModulePath = Path.Combine(AppContext.BaseDirectory, "Modules","Core");
+
+            _adminModules = LoadModules(adminModulePath, new[]
+                        {
+                            typeof(IApplicationBuilder),
+                            typeof(IModule),
+                            typeof(IServiceCollection),
+                        });
 
         }
 
@@ -83,33 +73,32 @@ namespace QrnCms.Web
                 .AddNewtonsoftJson();
             services.AddRazorPages();
 
-            foreach (var plugin in _plugins)
-            {
-                plugin.ConfigureServices(services);
-            }
-
-            var mvcBuilder = services.AddMvc(cfg=> { cfg.EnableEndpointRouting = false; });
+            var mvcBuilder = services.AddMvc(cfg => { cfg.EnableEndpointRouting = false; });
             GlobalContext.MvcBuilder = mvcBuilder;
 
-            var pluginAssembly = _moduleContext.LoadDefaultAssembly();
-
-            var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
-            foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
+            foreach (var me in _siteModules)
             {
-                Debug.WriteLine($"* {part.Name}");
-                mvcBuilder.PartManager.ApplicationParts.Add(part);
-            }
+                me.Module.ConfigureServices(services);
+                var pluginAssembly = me.Loader.LoadDefaultAssembly();
 
-            // This piece finds and loads related parts, such as MvcAppPlugin1.Views.dll.
-            var relatedAssembliesAttrs = pluginAssembly.GetCustomAttributes(typeof(RelatedAssemblyAttribute),true);
-            foreach (RelatedAssemblyAttribute attr in relatedAssembliesAttrs)
-            {
-                var assembly = _moduleContext.LoadAssembly(attr.AssemblyFileName);
-                partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
-                foreach (var part in partFactory.GetApplicationParts(assembly))
+                var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
+                foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
                 {
-                    Console.WriteLine($"  * {part.Name}");
+                    Debug.WriteLine($"* {part.Name}");
                     mvcBuilder.PartManager.ApplicationParts.Add(part);
+                }
+
+                // This piece finds and loads related parts, such as MvcAppPlugin1.Views.dll.
+                var relatedAssembliesAttrs = pluginAssembly.GetCustomAttributes(typeof(RelatedAssemblyAttribute), true);
+                foreach (RelatedAssemblyAttribute attr in relatedAssembliesAttrs)
+                {
+                    var assembly = me.Loader.LoadAssembly(attr.AssemblyFileName);
+                    partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
+                    foreach (var part in partFactory.GetApplicationParts(assembly))
+                    {
+                        Console.WriteLine($"  * {part.Name}");
+                        mvcBuilder.PartManager.ApplicationParts.Add(part);
+                    }
                 }
             }
 
@@ -121,6 +110,14 @@ namespace QrnCms.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseBranchWithServices("/admin",
+            (service) => {
+
+            },
+            (app) => {
+
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -146,9 +143,9 @@ namespace QrnCms.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-            foreach (var plugin in _plugins)
+            foreach (var sme in _siteModules)
             {
-                plugin.Configure(app);
+                sme.Module.Configure(app);
             }
 
             /*
@@ -161,6 +158,38 @@ namespace QrnCms.Web
             });
             */
 
+        }
+
+        private List<ModuleEntry> LoadModules(string modulePath, Type[] sharedTypes)
+        {
+            var moduleEntries = new List<ModuleEntry>();
+            foreach (var pluginDir in Directory.GetDirectories(modulePath))
+            {
+                var dirName = Path.GetFileName(pluginDir);
+                var pluginFile = Path.Combine(pluginDir, "bin", "Debug", "netcoreapp3.0", dirName + ".dll");
+
+                if (File.Exists(pluginFile))
+                {
+                    var moduleEntry = new ModuleEntry();
+
+                    moduleEntry.Loader = ModuleLoader.CreateFromAssemblyFile(pluginFile,
+                        // this ensures that the plugin resolves to the same version of DependencyInjection
+                        // and ASP.NET Core that the current app uses
+                        sharedTypes: sharedTypes,
+                        (opt) => { opt.PreferSharedTypes = true; opt.IsUnloadable = true; }
+                    );
+
+                    var pluginAssembly = moduleEntry.Loader.LoadDefaultAssembly();
+                    var type = pluginAssembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
+                    if(type != null)
+                    {
+                        Debug.WriteLine("Found plugin " + type.Name);
+                        moduleEntry.Module = (IModule)Activator.CreateInstance(type);
+                        moduleEntries.Add(moduleEntry);
+                    }
+                }
+            }
+            return moduleEntries;
         }
     }
 }

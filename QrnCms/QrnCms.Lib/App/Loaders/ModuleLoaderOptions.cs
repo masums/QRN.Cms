@@ -3,7 +3,7 @@
 
 using System;
 
-namespace McMaster.NETCore.Plugins
+namespace QrnCms.Lib.App.Loaders
 {
     /// <summary>
     /// Options for how <see cref="ModuleLoader"/> behaves.
