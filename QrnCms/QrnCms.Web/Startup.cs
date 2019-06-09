@@ -20,6 +20,7 @@ using QrnCms.Lib.App;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using QrnCms.Lib.App.Providers;
 using QrnCms.Lib.App.Loaders;
+using Microsoft.AspNetCore.Http;
 
 namespace QrnCms.Web
 {
@@ -112,10 +113,32 @@ namespace QrnCms.Web
         {
             app.UseBranchWithServices("/admin",
             (service) => {
-
+                service.AddMvc(cfg=>cfg.EnableEndpointRouting = false);
             },
             (app) => {
+                foreach (var ame in _adminModules)
+                {
+                    ame.Module.Configure(app);
+                }
 
+                app.UseMvc();
+                app.UseMvcWithDefaultRoute();
+
+                app.Use(async (c, next) =>
+                {
+                    if (c.Request.Path.ToString().Contains("restart"))
+                    {
+                        await c.Response.WriteAsync("Holla!");
+                        foreach (var ame in _adminModules)
+                        {
+                            ame.Module.Configure(app);
+                        }
+                    }
+                    else
+                    {
+                        await next();
+                    }
+                });
             });
 
             if (env.IsDevelopment())

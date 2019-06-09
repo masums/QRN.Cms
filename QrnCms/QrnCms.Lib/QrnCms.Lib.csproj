@@ -48,4 +48,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App\Middlewares\" />
+  </ItemGroup>
+
 </Project>
