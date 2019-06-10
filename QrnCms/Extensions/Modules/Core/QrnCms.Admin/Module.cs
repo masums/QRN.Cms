@@ -1,5 +1,4 @@
-﻿using QrnCms.Lib.Cms.Modules;
-using System;
+﻿using QrnCms.Shell.Modules;
 
 namespace QrnCms.Admin
 {

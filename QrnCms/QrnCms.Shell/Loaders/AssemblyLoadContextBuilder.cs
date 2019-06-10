@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     /// <summary>
     /// A builder for creating an instance of <see cref="AssemblyLoadContext" />.

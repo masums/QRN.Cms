@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\QrnCms.Lib\QrnCms.Lib.csproj" />
+    <ProjectReference Include="..\..\..\QrnCms.Shell\QrnCms.Shell.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +35,9 @@
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
       <HintPath>C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.0.0-preview5-19227-01\ref\netcoreapp3.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers">
+      <HintPath>C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.0.0-preview5-19227-01\ref\netcoreapp3.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
   </ItemGroup>
 

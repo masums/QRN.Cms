@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {    
     public class ModuleLoader : IDisposable
     {

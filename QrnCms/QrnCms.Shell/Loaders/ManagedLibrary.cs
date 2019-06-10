@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     /// <summary>
     /// Represents a managed, .NET assembly.

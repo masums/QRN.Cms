@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace QrnCms.Lib.App
+namespace QrnCms.Shell.Providers
 { 
     public class TypedControllerFeatureProvider<TController> : ControllerFeatureProvider where TController : ControllerBase
     {

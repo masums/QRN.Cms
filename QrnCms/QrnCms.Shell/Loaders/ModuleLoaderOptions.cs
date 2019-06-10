@@ -3,7 +3,7 @@
 
 using System;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     /// <summary>
     /// Options for how <see cref="ModuleLoader"/> behaves.

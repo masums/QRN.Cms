@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     internal class PlatformInformation
     {

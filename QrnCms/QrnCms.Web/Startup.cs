@@ -12,15 +12,16 @@ using QrnCms.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using QrnCms.Lib.Cms.Modules;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using QrnCms.Lib.App;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using QrnCms.Lib.App.Providers;
-using QrnCms.Lib.App.Loaders;
 using Microsoft.AspNetCore.Http;
+using QrnCms.Shell.Modules;
+using QrnCms.Shell.Providers;
+using QrnCms.Shell;
+using QrnCms.Shell.Loaders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace QrnCms.Web
 {
@@ -39,7 +40,7 @@ namespace QrnCms.Web
                         {
                             typeof(IApplicationBuilder),
                             typeof(IModule),
-                            typeof(IServiceCollection),
+                            typeof(IServiceCollection), 
                         });
 
             var adminModulePath = Path.Combine(AppContext.BaseDirectory, "Modules","Core");
@@ -48,7 +49,7 @@ namespace QrnCms.Web
                         {
                             typeof(IApplicationBuilder),
                             typeof(IModule),
-                            typeof(IServiceCollection),
+                            typeof(IServiceCollection), 
                         });
 
         }
@@ -65,8 +66,7 @@ namespace QrnCms.Web
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -74,8 +74,7 @@ namespace QrnCms.Web
                 .AddNewtonsoftJson();
             services.AddRazorPages();
 
-            var mvcBuilder = services.AddMvc(cfg => { cfg.EnableEndpointRouting = false; });
-            GlobalContext.MvcBuilder = mvcBuilder;
+            var mvcBuilder = services.AddMvc(cfg => { cfg.EnableEndpointRouting = false; }); 
 
             foreach (var me in _siteModules)
             {
@@ -93,7 +92,33 @@ namespace QrnCms.Web
                 var relatedAssembliesAttrs = pluginAssembly.GetCustomAttributes(typeof(RelatedAssemblyAttribute), true);
                 foreach (RelatedAssemblyAttribute attr in relatedAssembliesAttrs)
                 {
-                    var assembly = me.Loader.LoadAssembly(attr.AssemblyFileName);
+                    var assembly = me.Loader.LoadDefaultAssembly();
+                    partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
+                    foreach (var part in partFactory.GetApplicationParts(assembly))
+                    {
+                        Console.WriteLine($"  * {part.Name}");
+                        mvcBuilder.PartManager.ApplicationParts.Add(part);
+                    }
+                }
+            }
+
+            foreach (var me in _adminModules)
+            {
+                me.Module.ConfigureServices(services);
+                var pluginAssembly = me.Loader.LoadDefaultAssembly();
+
+                var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
+                foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
+                {
+                    Debug.WriteLine($"* {part.Name}");
+                    mvcBuilder.PartManager.ApplicationParts.Add(part);
+                }
+
+                // This piece finds and loads related parts, such as MvcAppPlugin1.Views.dll.
+                var relatedAssembliesAttrs = pluginAssembly.GetCustomAttributes(typeof(RelatedAssemblyAttribute), true);
+                foreach (RelatedAssemblyAttribute attr in relatedAssembliesAttrs)
+                {
+                    var assembly = me.Loader.LoadDefaultAssembly();
                     partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
                     foreach (var part in partFactory.GetApplicationParts(assembly))
                     {
@@ -110,37 +135,7 @@ namespace QrnCms.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseBranchWithServices("/admin",
-            (service) => {
-                service.AddMvc(cfg=>cfg.EnableEndpointRouting = false);
-            },
-            (app) => {
-                foreach (var ame in _adminModules)
-                {
-                    ame.Module.Configure(app);
-                }
-
-                app.UseMvc();
-                app.UseMvcWithDefaultRoute();
-
-                app.Use(async (c, next) =>
-                {
-                    if (c.Request.Path.ToString().Contains("restart"))
-                    {
-                        await c.Response.WriteAsync("Holla!");
-                        foreach (var ame in _adminModules)
-                        {
-                            ame.Module.Configure(app);
-                        }
-                    }
-                    else
-                    {
-                        await next();
-                    }
-                });
-            });
-
+        { 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -171,6 +166,11 @@ namespace QrnCms.Web
                 sme.Module.Configure(app);
             }
 
+            foreach (var ame in _adminModules)
+            {
+                ame.Module.Configure(app);
+            }
+
             /*
             app.UseEndpoints(endpoints =>
             {
@@ -186,28 +186,23 @@ namespace QrnCms.Web
         private List<ModuleEntry> LoadModules(string modulePath, Type[] sharedTypes)
         {
             var moduleEntries = new List<ModuleEntry>();
-            foreach (var pluginDir in Directory.GetDirectories(modulePath))
+            foreach (var moduleDir in Directory.GetDirectories(modulePath))
             {
-                var dirName = Path.GetFileName(pluginDir);
-                var pluginFile = Path.Combine(pluginDir, "bin", "Debug", "netcoreapp3.0", dirName + ".dll");
+                var dirName = Path.GetFileName(moduleDir);
+                var moduleFile = Path.Combine(moduleDir, "bin", "Debug", "netcoreapp3.0", dirName + ".dll");
 
-                if (File.Exists(pluginFile))
+                if (File.Exists(moduleFile))
                 {
                     var moduleEntry = new ModuleEntry();
+                    moduleEntry.Loader = ModuleLoader.CreateFromAssemblyFile(moduleFile, true, sharedTypes, (cfg)=> { cfg.PreferSharedTypes = true; cfg.IsUnloadable = true; });
+                    var moduleAssembly = moduleEntry.Loader.LoadDefaultAssembly();
+                    moduleEntry.Assembly = moduleAssembly;
 
-                    moduleEntry.Loader = ModuleLoader.CreateFromAssemblyFile(pluginFile,
-                        // this ensures that the plugin resolves to the same version of DependencyInjection
-                        // and ASP.NET Core that the current app uses
-                        sharedTypes: sharedTypes,
-                        (opt) => { opt.PreferSharedTypes = true; opt.IsUnloadable = true; }
-                    );
-
-                    var pluginAssembly = moduleEntry.Loader.LoadDefaultAssembly();
-                    var type = pluginAssembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
+                    var type = moduleAssembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
                     if(type != null)
                     {
-                        Debug.WriteLine("Found plugin " + type.Name);
-                        moduleEntry.Module = (IModule)Activator.CreateInstance(type);
+                        Debug.WriteLine("Found Module " + type.FullName);
+                        moduleEntry.Module = (IModule) Activator.CreateInstance(type);
                         moduleEntries.Add(moduleEntry);
                     }
                 }

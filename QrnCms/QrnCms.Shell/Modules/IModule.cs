@@ -11,10 +11,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using QrnCms.Lib.App;
+using System.Text; 
 
-namespace QrnCms.Lib.Cms.Modules
+namespace QrnCms.Shell.Modules
 {
     public interface IModule
     {
@@ -67,9 +66,9 @@ namespace QrnCms.Lib.Cms.Modules
 
         public string Area => "";
 
-        public List<string> SupportedLanguages => new List<string>() { App.SupportedLanguages.En.ToString()};
+        public List<string> SupportedLanguages => new List<string>() { "en" };
 
-        public List<string> SupportedDatabases => new List<string>() { App.SupportedDatabase.MySql.ToString()};
+        public List<string> SupportedDatabases => new List<string>() { "MySql" };
 
         public virtual bool Activate()
         {

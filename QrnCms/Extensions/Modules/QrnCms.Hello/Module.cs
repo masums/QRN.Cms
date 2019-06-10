@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using QrnCms.Lib.Cms.Modules;
+using QrnCms.Shell.Modules;
 using System;
 
 namespace QrnCms.Hello

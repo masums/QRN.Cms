@@ -15,13 +15,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0-preview5.19227.1" />
   </ItemGroup>
 
-
   <ItemGroup>
-    <ProjectReference Include="..\QrnCms.Lib\QrnCms.Lib.csproj" />
+    <None Include="$(SolutionDir)Extensions\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(SolutionDir)Extensions\**" CopyToOutputDirectory="PreserveNewest" />
+    <ProjectReference Include="..\QrnCms.Shell\QrnCms.Shell.csproj" />
   </ItemGroup>
   
 </Project>

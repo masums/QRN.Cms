@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\QrnCms.Lib\QrnCms.Lib.csproj" />
+    <ProjectReference Include="..\..\..\..\QrnCms.Shell\QrnCms.Shell.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     /// <summary>
     /// Extensions for creating a load context using settings from a runtimeconfig.json file

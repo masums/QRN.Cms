@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyModel;
 
-namespace QrnCms.Lib.App.Loaders
+namespace QrnCms.Shell.Loaders
 {
     /// <summary>
     /// Extensions for configuring a load context using .deps.json files.

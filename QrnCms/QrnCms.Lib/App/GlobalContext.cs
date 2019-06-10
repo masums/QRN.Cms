@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using QrnCms.Lib.App.Loaders;
+using QrnCms.Shell.Loaders;
 using System;
 using System.Collections.Generic;
 using System.Text;

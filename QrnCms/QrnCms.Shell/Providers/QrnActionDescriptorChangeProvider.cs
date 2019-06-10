@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace QrnCms.Lib.App.Providers
+namespace QrnCms.Shell.Providers
 { 
     public class QrnActionDescriptorChangeProvider : IActionDescriptorChangeProvider
     {

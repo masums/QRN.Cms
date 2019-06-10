@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
-using QrnCms.Lib.App;
-using QrnCms.Lib.App.Providers;
+using QrnCms.Shell.Providers;
 using QrnCms.Web.Models;
 
 namespace QrnCms.Web.Controllers

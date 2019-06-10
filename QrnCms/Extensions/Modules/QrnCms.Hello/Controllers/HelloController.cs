@@ -7,9 +7,9 @@ namespace QrnCms.Hello.Controllers
 {
     public class HelloController : Controller
     {
-        public IActionResult Index()
+        public ContentResult Index()
         {
-            return View();
+            return new ContentResult() { Content = " Hello from Index ", ContentType = "text/html; charset=utf-8", StatusCode = 200 };
         }
     }
 }

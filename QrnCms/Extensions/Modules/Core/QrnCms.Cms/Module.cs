@@ -1,4 +1,4 @@
-﻿using QrnCms.Lib.Cms.Modules;
+﻿using QrnCms.Shell.Modules;
 using System;
 
 namespace QrnCms.Cms
