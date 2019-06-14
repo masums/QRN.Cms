@@ -9,6 +9,7 @@ namespace QrnCms.Shell.Modules
 {
     public class ModuleEntry
     {
+        public string ModuleName { get; set; }
         public IModule Module { get; set; }
         public ModuleLoader Loader { get; set; }
         public Assembly Assembly { get; set; }

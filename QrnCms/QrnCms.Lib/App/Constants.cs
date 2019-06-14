@@ -6,6 +6,6 @@ namespace QrnCms.Lib.App
 {
     public static class Constants
     {
-        
+
     } 
 }

@@ -36,22 +36,25 @@ namespace QrnCms.Web
 
             var siteModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
 
-            _siteModules = LoadModules(siteModulePath, new[]
+            _siteModules = ModuleLoader.LoadModules(siteModulePath, new[]
                         {
                             typeof(IApplicationBuilder),
                             typeof(IModule),
                             typeof(IServiceCollection), 
                         });
+
+            GlobalContext.SiteModules = _siteModules;
 
             var adminModulePath = Path.Combine(AppContext.BaseDirectory, "Modules","Core");
 
-            _adminModules = LoadModules(adminModulePath, new[]
+            _adminModules = ModuleLoader.LoadModules(adminModulePath, new[]
                         {
                             typeof(IApplicationBuilder),
                             typeof(IModule),
                             typeof(IServiceCollection), 
                         });
 
+            GlobalContext.AdminModules = _adminModules;
         }
 
         public IConfiguration Configuration { get; }
@@ -130,6 +133,7 @@ namespace QrnCms.Web
 
             services.AddSingleton<IActionDescriptorChangeProvider>(QrnActionDescriptorChangeProvider.Instance);
             services.AddSingleton(QrnActionDescriptorChangeProvider.Instance);
+            services.AddSession();
 
         }
 
@@ -148,6 +152,7 @@ namespace QrnCms.Web
                 app.UseHsts();
             }
 
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -183,31 +188,6 @@ namespace QrnCms.Web
 
         }
 
-        private List<ModuleEntry> LoadModules(string modulePath, Type[] sharedTypes)
-        {
-            var moduleEntries = new List<ModuleEntry>();
-            foreach (var moduleDir in Directory.GetDirectories(modulePath))
-            {
-                var dirName = Path.GetFileName(moduleDir);
-                var moduleFile = Path.Combine(moduleDir, "bin", "Debug", "netcoreapp3.0", dirName + ".dll");
-
-                if (File.Exists(moduleFile))
-                {
-                    var moduleEntry = new ModuleEntry();
-                    moduleEntry.Loader = ModuleLoader.CreateFromAssemblyFile(moduleFile, true, sharedTypes, (cfg)=> { cfg.PreferSharedTypes = true; cfg.IsUnloadable = true; });
-                    var moduleAssembly = moduleEntry.Loader.LoadDefaultAssembly();
-                    moduleEntry.Assembly = moduleAssembly;
-
-                    var type = moduleAssembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
-                    if(type != null)
-                    {
-                        Debug.WriteLine("Found Module " + type.FullName);
-                        moduleEntry.Module = (IModule) Activator.CreateInstance(type);
-                        moduleEntries.Add(moduleEntry);
-                    }
-                }
-            }
-            return moduleEntries;
-        }
+        
     }
 }

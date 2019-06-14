@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using QrnCms.Shell.Modules;
 using System;
 
@@ -7,7 +8,10 @@ namespace QrnCms.Hello
 {
     public class Module : BaseModule, IModule
     {
-
+        public Module()
+        {
+            Version = new Version(1, 0, 1, 1);
+        }
         public override void Configure(IApplicationBuilder appBuilder)
         {
             //appBuilder.Map(new Microsoft.AspNetCore.Http.PathString("/plugins/v1"), cfg => {
@@ -18,5 +22,10 @@ namespace QrnCms.Hello
             //});
             base.Configure(appBuilder);
         }
+
+        public override void ConfigureServices(IServiceCollection service)
+        {
+
+        }    
     }
 }

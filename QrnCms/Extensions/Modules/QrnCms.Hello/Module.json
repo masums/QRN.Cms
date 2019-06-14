@@ -1,0 +1,14 @@
+﻿{
+  "Title": "QRN CMS Hello World Module",
+  "Author": "QRN CMS",
+  "Email": "tecrt.com@gmail.com",
+  "Website": "http://tecrt.com",
+  "DemoUrl": "http://tecrt.com",
+  "Description": "Builtin Content Management Example Module.",
+  "Version": "0.0.1.1",
+  "CmsMinVersion": "0.0.1.1",
+  "Dependencies": [],
+  "TablePrefix": "",
+  "Category": "Hello World, Example",
+  "Order": 100
+}

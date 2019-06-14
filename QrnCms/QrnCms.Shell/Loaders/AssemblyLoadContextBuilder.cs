@@ -52,8 +52,7 @@ namespace QrnCms.Shell.Loaders
                 _defaultAssemblies,
                 _additionalProbingPaths,
                 resourceProbingPaths,
-                _preferDefaultLoadContext,
- 
+                _preferDefaultLoadContext, 
                 _isCollectible);
  
         }
