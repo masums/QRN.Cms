@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QrnCms.Lib.App
+namespace QrnCms.Shell
 {
     public static class Constants
     {

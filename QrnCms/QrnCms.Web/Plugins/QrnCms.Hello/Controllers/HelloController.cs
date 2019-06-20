@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using QrnCms.Lib;
-using QrnCms.Lib.App;
 using QrnCms.Shell;
 using QrnCms.Shell.Modules;
 using System;

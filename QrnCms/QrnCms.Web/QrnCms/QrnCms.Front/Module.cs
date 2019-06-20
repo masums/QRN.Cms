@@ -1,7 +1,7 @@
 ﻿using QrnCms.Shell.Modules;
 using System;
 
-namespace QrnCms.Cms
+namespace QrnCms.Blog
 {
     public class Module : BaseModule, IModule
     {

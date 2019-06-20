@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QrnCms.Lib
+namespace QrnCms.Shell
 {
     public class CmsInfo
     {

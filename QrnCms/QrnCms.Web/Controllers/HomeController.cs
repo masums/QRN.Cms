@@ -22,10 +22,11 @@ namespace QrnCms.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationPartManager _partManager;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
         public HomeController(
             ApplicationPartManager partManager,
-            IHostingEnvironment env)
+            IWebHostEnvironment env)
         {
             _partManager = partManager;
             _hostingEnvironment = env;

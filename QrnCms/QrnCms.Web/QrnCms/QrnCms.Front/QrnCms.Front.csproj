@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\QrnCms.Lib\QrnCms.Lib.csproj" />
-    <ProjectReference Include="..\..\..\..\QrnCms.Shell\QrnCms.Shell.csproj" />
+    <ProjectReference Include="..\..\..\QrnCms.Lib\QrnCms.Lib.csproj" />
   </ItemGroup>
 
 </Project>

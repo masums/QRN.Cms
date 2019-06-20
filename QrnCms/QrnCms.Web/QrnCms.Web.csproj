@@ -20,7 +20,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QrnCms.Shell\QrnCms.Shell.csproj" />
+    <Compile Remove="Plugins\**" />
+    <Compile Remove="QrnCms\**" />
+    <Compile Remove="Themes\**" />
+    <Content Remove="Plugins\**" />
+    <Content Remove="QrnCms\**" />
+    <Content Remove="Themes\**" />
+    <EmbeddedResource Remove="Plugins\**" />
+    <EmbeddedResource Remove="QrnCms\**" />
+    <EmbeddedResource Remove="Themes\**" />
+    <None Remove="Plugins\**" />
+    <None Remove="QrnCms\**" />
+    <None Remove="Themes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QrnCms.Lib\QrnCms.Lib.csproj" />
   </ItemGroup>
   
 </Project>

@@ -30,11 +30,11 @@ namespace QrnCms.Web
         List<ModuleEntry> _adminModules = new List<ModuleEntry>();
         List<ModuleEntry> _siteModules = new List<ModuleEntry>();
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
 
-            var siteModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
+            var siteModulePath = Path.Combine(env.ContentRootPath,"Plugins");
 
             _siteModules = ModuleLoader.LoadModules(siteModulePath, new[]
                         {
@@ -45,7 +45,7 @@ namespace QrnCms.Web
 
             GlobalContext.SiteModules = _siteModules;
 
-            var adminModulePath = Path.Combine(AppContext.BaseDirectory, "Modules","Core");
+            var adminModulePath = Path.Combine(env.ContentRootPath,"QrnCms");
 
             _adminModules = ModuleLoader.LoadModules(adminModulePath, new[]
                         {
