@@ -37,6 +37,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D1B6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrnCms.Hello.Test", "UnitTests\Plugins\QrnCms.Hello.Test\QrnCms.Hello.Test.csproj", "{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{152B3F73-7625-438A-AD7F-5737824593B9}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CDEAF412-91CF-475C-A68D-69A01E073539}"
+	ProjectSection(SolutionItems) = preProject
+		..\Docs\001.Index.md = ..\Docs\001.Index.md
+		..\Docs\002.Structure.md = ..\Docs\002.Structure.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +114,7 @@ Global
 		{502F616B-E3CC-462E-8E4C-7A5574BDA9FB} = {21505864-7CA3-4452-8ADB-414A8D18E1D5}
 		{D1B603B5-2519-4A36-8F7B-601F78885C94} = {944936FD-AB87-4BC3-8A2A-A7CAD57C54F4}
 		{3725556C-5F05-41EC-B9CC-EC607BEBCE8E} = {D1B603B5-2519-4A36-8F7B-601F78885C94}
+		{CDEAF412-91CF-475C-A68D-69A01E073539} = {152B3F73-7625-438A-AD7F-5737824593B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C97A7A57-FD09-400A-803F-25C494C13103}

@@ -1,3 +1,5 @@
 .vs
 bin
 obj
+/QrnCms/UnitTests/QrnCms/QrnCms.Front.Test/*.user
+*.user
