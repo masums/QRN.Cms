@@ -23,19 +23,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.DefaultTheme", "QrnC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Hello", "QrnCms.Web\Plugins\QrnCms.Hello\QrnCms.Hello.csproj", "{9DF71FF9-D08B-4C0D-818C-5969664A3F34}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Lib.Impl", "QrnCms.Lib.Impl\QrnCms.Lib.Impl.csproj", "{27E13479-6DE3-4FE2-BF58-485A07049A92}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QrnCms", "QrnCms", "{21505864-7CA3-4452-8ADB-414A8D18E1D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Lib.Test", "UnitTests\QrnCms\QrnCms.Lib.Test\QrnCms.Lib.Test.csproj", "{981773B1-F91B-4607-8B73-ECC2768CBB3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrnCms.Admin.Test", "UnitTests\QrnCms\QrnCms.Admin.Test\QrnCms.Admin.Test.csproj", "{47C72A09-8DB7-4E03-93F8-81A111A1CED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Admin.Test", "UnitTests\QrnCms\QrnCms.Admin.Test\QrnCms.Admin.Test.csproj", "{47C72A09-8DB7-4E03-93F8-81A111A1CED4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrnCms.Front.Test", "UnitTests\QrnCms\QrnCms.Front.Test\QrnCms.Front.Test.csproj", "{502F616B-E3CC-462E-8E4C-7A5574BDA9FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Front.Test", "UnitTests\QrnCms\QrnCms.Front.Test\QrnCms.Front.Test.csproj", "{502F616B-E3CC-462E-8E4C-7A5574BDA9FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D1B603B5-2519-4A36-8F7B-601F78885C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrnCms.Hello.Test", "UnitTests\Plugins\QrnCms.Hello.Test\QrnCms.Hello.Test.csproj", "{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Hello.Test", "UnitTests\Plugins\QrnCms.Hello.Test\QrnCms.Hello.Test.csproj", "{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{152B3F73-7625-438A-AD7F-5737824593B9}"
 	ProjectSection(SolutionItems) = preProject
@@ -48,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CDEAF412-9
 		..\Docs\001.Index.md = ..\Docs\001.Index.md
 		..\Docs\002.Structure.md = ..\Docs\002.Structure.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrnCms.Lib.Impl", "QrnCms.Web\QrnCms\QrnCms.Lib.Impl\QrnCms.Lib.Impl.csproj", "{9146EC86-9EDA-4B10-ADF6-97534D19F25B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +79,6 @@ Global
 		{9DF71FF9-D08B-4C0D-818C-5969664A3F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DF71FF9-D08B-4C0D-818C-5969664A3F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DF71FF9-D08B-4C0D-818C-5969664A3F34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27E13479-6DE3-4FE2-BF58-485A07049A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27E13479-6DE3-4FE2-BF58-485A07049A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27E13479-6DE3-4FE2-BF58-485A07049A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27E13479-6DE3-4FE2-BF58-485A07049A92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{981773B1-F91B-4607-8B73-ECC2768CBB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{981773B1-F91B-4607-8B73-ECC2768CBB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{981773B1-F91B-4607-8B73-ECC2768CBB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,6 +95,10 @@ Global
 		{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3725556C-5F05-41EC-B9CC-EC607BEBCE8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9146EC86-9EDA-4B10-ADF6-97534D19F25B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9146EC86-9EDA-4B10-ADF6-97534D19F25B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9146EC86-9EDA-4B10-ADF6-97534D19F25B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9146EC86-9EDA-4B10-ADF6-97534D19F25B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +115,7 @@ Global
 		{D1B603B5-2519-4A36-8F7B-601F78885C94} = {944936FD-AB87-4BC3-8A2A-A7CAD57C54F4}
 		{3725556C-5F05-41EC-B9CC-EC607BEBCE8E} = {D1B603B5-2519-4A36-8F7B-601F78885C94}
 		{CDEAF412-91CF-475C-A68D-69A01E073539} = {152B3F73-7625-438A-AD7F-5737824593B9}
+		{9146EC86-9EDA-4B10-ADF6-97534D19F25B} = {5B23A496-990B-4217-B48F-795712264FFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C97A7A57-FD09-400A-803F-25C494C13103}

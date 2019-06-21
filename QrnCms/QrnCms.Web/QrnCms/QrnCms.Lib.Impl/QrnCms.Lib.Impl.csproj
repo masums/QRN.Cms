@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\QrnCms.Web\QrnCms\Lib\Bin\Debug\</OutputPath>
+    <OutputPath>..\Libs\Bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,7 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QrnCms.Lib\QrnCms.Lib.csproj" />
+    <ProjectReference Include="..\..\..\QrnCms.Lib\QrnCms.Lib.csproj" />
   </ItemGroup>
 
 </Project>
