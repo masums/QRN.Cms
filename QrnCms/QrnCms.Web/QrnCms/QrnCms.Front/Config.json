@@ -1,0 +1,14 @@
+﻿{
+  "Title": "QRN CMS Front",
+  "Author": "QRN CMS",
+  "Email": "tecrt.com@gmail.com",
+  "Website": "http://tecrt.com",
+  "DemoUrl": "http://tecrt.com",
+  "Description": "Frontend functionalities for CMS.",
+  "Version": "0.0.1.1",
+  "CmsMinVersion": "0.0.1.1",
+  "Dependencies": [],
+  "TablePrefix": "",
+  "Category": "Core, Plugins",
+  "Order": 1
+}

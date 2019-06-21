@@ -13,15 +13,15 @@ using System.Runtime.Loader;
 
 namespace QrnCms.Shell.Loaders
 {    
-    public class ModuleLoader : IDisposable
+    public class PluginLoader : IDisposable
     {
         public WeakReference Reference { get; set; }
 
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile, bool isUnloadable, Type[] sharedTypes)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile, bool isUnloadable, Type[] sharedTypes)
             => CreateFromAssemblyFile(assemblyFile, isUnloadable, sharedTypes, _ => { });
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile, bool isUnloadable, Type[] sharedTypes, Action<ModuleLoaderConfig> configure)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile, bool isUnloadable, Type[] sharedTypes, Action<ModuleLoaderConfig> configure)
         {
             return CreateFromAssemblyFile(assemblyFile,
                     sharedTypes,
@@ -32,11 +32,11 @@ namespace QrnCms.Shell.Loaders
                     });
         }
 
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile, Type[] sharedTypes)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile, Type[] sharedTypes)
             => CreateFromAssemblyFile(assemblyFile, sharedTypes, _ => { });
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile, Type[] sharedTypes, Action<ModuleLoaderConfig> configure)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile, Type[] sharedTypes, Action<ModuleLoaderConfig> configure)
         {
             return CreateFromAssemblyFile(assemblyFile,
                     config =>
@@ -53,11 +53,11 @@ namespace QrnCms.Shell.Loaders
         }
 
 
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile)
             => CreateFromAssemblyFile(assemblyFile, _ => { });
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ModuleLoader CreateFromAssemblyFile(string assemblyFile, Action<ModuleLoaderConfig> configure)
+        public static PluginLoader CreateFromAssemblyFile(string assemblyFile, Action<ModuleLoaderConfig> configure)
         {
             if (configure == null)
             {
@@ -66,7 +66,7 @@ namespace QrnCms.Shell.Loaders
 
             var config = new ModuleLoaderConfig(assemblyFile);
             configure(config);
-            return new ModuleLoader(config);
+            return new PluginLoader(config);
         }
 
         private readonly ModuleLoaderConfig _config;
@@ -74,7 +74,7 @@ namespace QrnCms.Shell.Loaders
         private volatile bool _disposed;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public ModuleLoader(ModuleLoaderConfig config)
+        public PluginLoader(ModuleLoaderConfig config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _context = CreateLoadContext(config);
@@ -128,7 +128,7 @@ namespace QrnCms.Shell.Loaders
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(nameof(ModuleLoader));
+                throw new ObjectDisposedException(nameof(PluginLoader));
             }
         }
 
@@ -177,13 +177,13 @@ namespace QrnCms.Shell.Loaders
                     var moduleAssembly = moduleEntry.Loader.LoadDefaultAssembly();
                     moduleEntry.Assembly = moduleAssembly;
                     moduleEntry.Path = moduleFile;
-                    moduleEntry.ModuleName = dirName;
+                    moduleEntry.PluginName = dirName;
 
-                    var type = moduleAssembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
+                    var type = moduleAssembly.GetTypes().Where(t => typeof(IPlugin).IsAssignableFrom(t) && !t.IsAbstract).FirstOrDefault();
                     if (type != null)
                     {
                         Debug.WriteLine("Found Module " + type.FullName);
-                        moduleEntry.Module = (IModule)Activator.CreateInstance(type);
+                        moduleEntry.Plugin = (IPlugin) Activator.CreateInstance(type);
                         moduleEntries.Add(moduleEntry);
                     }
                 }

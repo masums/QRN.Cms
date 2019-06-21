@@ -15,7 +15,7 @@ using System.Text;
 
 namespace QrnCms.Shell.Modules
 {
-    public interface IModule
+    public interface IPlugin
     {
         int Order { get; set; }
 
@@ -50,7 +50,7 @@ namespace QrnCms.Shell.Modules
         bool RemoveTables();
     }
 
-    public class BaseModule : IModule
+    public class BasePlugin : IPlugin
     {
         public int Order { get; set; }
         public string Title { get; set; }

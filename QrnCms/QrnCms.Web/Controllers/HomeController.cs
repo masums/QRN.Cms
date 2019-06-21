@@ -65,13 +65,13 @@ namespace QrnCms.Web.Controllers
             QrnActionDescriptorChangeProvider.Instance.TokenSource.Cancel();
 
             var modulePath = "";
-            var module = GlobalContext.SiteModules.Where(x => x.ModuleName == "QrnCms.Hello").FirstOrDefault();
+            var module = GlobalContext.SiteModules.Where(x => x.PluginName == "QrnCms.Hello").FirstOrDefault();
             if(module != null)
             {
                 modulePath = module.Path;
 
                 module.Assembly = null;
-                module.Module = null;
+                module.Plugin = null;
                 module.Loader.Dispose();
 
                 for (int i = 0; i < 10; i++)
@@ -106,10 +106,10 @@ namespace QrnCms.Web.Controllers
         {
             var siteModulePath = Path.Combine(AppContext.BaseDirectory, "Modules");
 
-            var siteModules = ModuleLoader.LoadModules(siteModulePath, new[]
+            var siteModules = PluginLoader.LoadModules(siteModulePath, new[]
                         {
                             typeof(IApplicationBuilder),
-                            typeof(IModule),
+                            typeof(IPlugin),
                             typeof(IServiceCollection),
                         });
 

@@ -12,7 +12,7 @@ namespace QrnCms.Hello.Controllers
     {
         public ContentResult Index()
         {
-            var moduleVersion = new Module().Version.ToString();
+            var moduleVersion = new Plugin().Version.ToString();
             var sl = SupportedLanguages.En;
             var me = new ModuleEntry();
 

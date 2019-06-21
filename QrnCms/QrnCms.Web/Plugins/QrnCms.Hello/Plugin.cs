@@ -6,9 +6,9 @@ using System;
 
 namespace QrnCms.Hello
 {
-    public class Module : BaseModule, IModule
+    public class Plugin : BasePlugin, IPlugin
     {
-        public Module()
+        public Plugin()
         {
             Version = new Version(1, 0, 1, 1);
         }

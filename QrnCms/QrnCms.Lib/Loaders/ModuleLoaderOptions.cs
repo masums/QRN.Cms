@@ -6,7 +6,7 @@ using System;
 namespace QrnCms.Shell.Loaders
 {
     /// <summary>
-    /// Options for how <see cref="ModuleLoader"/> behaves.
+    /// Options for how <see cref="PluginLoader"/> behaves.
     /// </summary>
     [Flags]
     [Obsolete("This API is obsolete and will be removed in a future version. The recommended replacement is PluginConfig")]

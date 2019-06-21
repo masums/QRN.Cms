@@ -3,7 +3,7 @@ using System;
 
 namespace QrnCms.Blog
 {
-    public class Module : BaseModule, IModule
+    public class Plugin : BasePlugin, IPlugin
     {
     }
 }

@@ -36,10 +36,10 @@ namespace QrnCms.Web
 
             var siteModulePath = Path.Combine(env.ContentRootPath,"Plugins");
 
-            _siteModules = ModuleLoader.LoadModules(siteModulePath, new[]
+            _siteModules = PluginLoader.LoadModules(siteModulePath, new[]
                         {
                             typeof(IApplicationBuilder),
-                            typeof(IModule),
+                            typeof(IPlugin),
                             typeof(IServiceCollection), 
                         });
 
@@ -47,10 +47,10 @@ namespace QrnCms.Web
 
             var adminModulePath = Path.Combine(env.ContentRootPath,"QrnCms");
 
-            _adminModules = ModuleLoader.LoadModules(adminModulePath, new[]
+            _adminModules = PluginLoader.LoadModules(adminModulePath, new[]
                         {
                             typeof(IApplicationBuilder),
-                            typeof(IModule),
+                            typeof(IPlugin),
                             typeof(IServiceCollection), 
                         });
 
@@ -81,7 +81,7 @@ namespace QrnCms.Web
 
             foreach (var me in _siteModules)
             {
-                me.Module.ConfigureServices(services);
+                me.Plugin.ConfigureServices(services);
                 var pluginAssembly = me.Loader.LoadDefaultAssembly();
 
                 var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
@@ -107,7 +107,7 @@ namespace QrnCms.Web
 
             foreach (var me in _adminModules)
             {
-                me.Module.ConfigureServices(services);
+                me.Plugin.ConfigureServices(services);
                 var pluginAssembly = me.Loader.LoadDefaultAssembly();
 
                 var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
@@ -168,12 +168,12 @@ namespace QrnCms.Web
 
             foreach (var sme in _siteModules)
             {
-                sme.Module.Configure(app);
+                sme.Plugin.Configure(app);
             }
 
             foreach (var ame in _adminModules)
             {
-                ame.Module.Configure(app);
+                ame.Plugin.Configure(app);
             }
 
             /*
